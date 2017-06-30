@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import it.polito.tdp.flight.model.Airline;
 import it.polito.tdp.flight.model.Airport;
 
 public class FlightDAO {
@@ -49,11 +51,41 @@ public class FlightDAO {
 		}
 	}
 	
-	public static void main(String args[]) {
-		FlightDAO dao = new FlightDAO() ;
+	
+	public List<Airline> getAllAirlines(Map<Integer, Airline> mappaCompagnie) {
 		
-		List<Airport> arps = dao.getAllAirports() ;
-		System.out.println(arps);
+		String sql = 
+				"SELECT Airline_ID,Name,Alias,IATA,ICAO,Callsign,Country,Active " +
+				"FROM airline " +
+				"ORDER BY Name ";
+		
+		List<Airline> list = new ArrayList<>() ;
+		
+		try {
+			Connection conn = DBConnect.getConnection() ;
+
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			
+			ResultSet res = st.executeQuery() ;
+			
+			while(res.next()) {
+				
+				Airline compagnia = new Airline(res.getInt("Airline_ID"),res.getString("Name"),res.getString("Alias"),res.getString("IATA"),res.getString("ICAO"),
+						res.getString("Callsign"),res.getString("Callsign"),res.getString("Active"));
+				list.add(compagnia);
+				mappaCompagnie.put(compagnia.getAirlineId(), compagnia);
+				
+			}
+			
+			conn.close();
+			
+			return list ;
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+			return null ;
+		}
 	}
+	
 	
 }

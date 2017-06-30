@@ -2,12 +2,17 @@ package it.polito.tdp.flight;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.flight.model.Airline;
+import it.polito.tdp.flight.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 
 public class FlightController {
+	
+	private Model model;
 
     @FXML
     private ResourceBundle resources;
@@ -16,15 +21,25 @@ public class FlightController {
     private URL location;
 
     @FXML
-    private ComboBox<?> boxAirline;
+    private ComboBox<Airline> boxAirline;
 
     @FXML
     private ComboBox<?> boxAirport;
 
     @FXML
     private TextArea txtResult;
+    
 
-    @FXML
+    /**
+	 * @param model the model to set
+	 */
+	public void setModel(Model model) {
+		this.model = model;
+		
+		this.boxAirline.getItems().addAll(model.getAllAirlines());
+	}
+
+	@FXML
     void doRaggiungibili(ActionEvent event) {
 
     }
